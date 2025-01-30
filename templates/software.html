@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ПО для установки</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>ПО для установки</h1>
+    <ul>
+        {% for file in files %}
+        <li>
+            {{ file }} 
+            <a href="{{ url_for('install', filename=file) }}">
+                <button>Установить</button>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    <p><a href='/'>Назад</a></p>
+</body>
+</html>

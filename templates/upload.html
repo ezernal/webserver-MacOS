@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка файлов</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Загрузка файлов</h1>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Загрузить">
+    </form>
+    <progress id="progressBar" value="0" max="100" style="width:100%;"></progress>
+    <p id="status"></p>
+    <p><a href='/'>Назад</a></p>
+    <script>
+        document.getElementById('uploadForm').onsubmit = function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/upload', true);
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    var percentComplete = (event.loaded / event.total) * 100;
+                    document.getElementById('progressBar').value = percentComplete;
+                    document.getElementById('status').innerText = Math.round(percentComplete) + '% загружено';
+                }
+            };
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    document.getElementById('status').innerText = 'Загрузка завершена';
+                    window.location.href = '/files';
+                } else {
+                    document.getElementById('status').innerText = 'Ошибка загрузки';
+                }
+            };
+            xhr.send(formData);
+        };
+    </script>
+</body>
+</html>
